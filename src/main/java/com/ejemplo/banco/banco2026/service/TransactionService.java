@@ -3,6 +3,7 @@ package com.ejemplo.banco.banco2026.service;
 import com.ejemplo.banco.banco2026.DTO.TransactionDTO;
 import com.ejemplo.banco.banco2026.entity.Customer;
 import com.ejemplo.banco.banco2026.entity.Transaction;
+import com.ejemplo.banco.banco2026.exception.ResourceNotFoundException;
 import com.ejemplo.banco.banco2026.mapper.TransactionMapper;
 import com.ejemplo.banco.banco2026.repository.CustomerRepository;
 import com.ejemplo.banco.banco2026.repository.TransactionRepository;
@@ -82,12 +83,12 @@ public class TransactionService {
 
     public TransactionDTO getTransactionById(Long id){
         return transactionRepository.findById(id).map(transactionMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
     }
 
     public TransactionDTO updateTransactionById(Long id, TransactionDTO transactionDTO) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
         Customer sender =
                 customerRepository.findByAccountNumber(transactionDTO.getSenderAccountNumber())
                         .orElseThrow(()-> new IllegalArgumentException("Sender Account Number not found"));
@@ -134,14 +135,14 @@ public class TransactionService {
 
     public String deleteTransactionById(Long id) {
         Transaction transaction =  transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
 
         Customer sender =
                 customerRepository.findByAccountNumber(transaction.getSenderAccountNumber())
-                        .orElseThrow(()-> new IllegalArgumentException("Sender Account Number not found"));
+                        .orElseThrow(()-> new ResourceNotFoundException("Sender Account Number not found"));
         Customer receiver =
                 customerRepository.findByAccountNumber(transaction.getReceiverAccountNumber())
-                        .orElseThrow(()-> new IllegalArgumentException("Receiver Account Number not found"));
+                        .orElseThrow(()-> new ResourceNotFoundException("Receiver Account Number not found"));
 
         if(receiver.getBalance() < transaction.getAmount()){
             throw new IllegalArgumentException("Receiver Balance not enough");

@@ -2,6 +2,7 @@ package com.ejemplo.banco.banco2026.controller;
 
 import com.ejemplo.banco.banco2026.DTO.TransactionDTO;
 import com.ejemplo.banco.banco2026.service.TransactionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,8 @@ public class TransferController {
 
     @PostMapping()
     public ResponseEntity<TransactionDTO> createTransaction(@RequestBody TransactionDTO transactionDTO) {
-        return ResponseEntity.ok(transactionFacade.transferMoney(transactionDTO));
+       TransactionDTO createTransaction = transactionFacade.transferMoney(transactionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createTransaction);
     }
 
     @PutMapping("/{id}")
@@ -37,7 +39,8 @@ public class TransferController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTransactionById(@PathVariable long id){
-        return ResponseEntity.ok(transactionFacade.deleteTransactionById(id));
+        transactionFacade.deleteTransactionById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

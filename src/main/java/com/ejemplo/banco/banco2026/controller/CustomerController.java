@@ -2,6 +2,7 @@ package com.ejemplo.banco.banco2026.controller;
 
 import com.ejemplo.banco.banco2026.DTO.CustomerDTO;
 import com.ejemplo.banco.banco2026.service.CustomerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -29,6 +30,7 @@ public class CustomerController {
         if(customerDTO.getBalance() == null) {
             throw new IllegalArgumentException("Balance cannot be null");
         }
-        return ResponseEntity.ok(customerFacade.createCustomer(customerDTO));
+        CustomerDTO created = customerFacade.createCustomer(customerDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }
