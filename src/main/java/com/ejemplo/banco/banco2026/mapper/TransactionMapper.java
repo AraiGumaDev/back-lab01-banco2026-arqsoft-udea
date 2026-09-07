@@ -9,4 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface TransactionMapper {
     TransactionMapper INSTANCE= Mappers.getMapper(TransactionMapper.class);
     TransactionDTO toDTO(Transaction transaction);
+    Transaction toEntity(TransactionDTO transactionDTO);
 }

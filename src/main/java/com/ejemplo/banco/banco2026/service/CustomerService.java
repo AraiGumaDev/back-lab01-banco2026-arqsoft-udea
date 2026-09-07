@@ -32,6 +32,7 @@ public class CustomerService {
 
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
         Customer customer = customerMapper.toEntity(customerDTO);
+        customer.setId(null);
         return customerMapper.toDTO(customerRepository.save(customer));
     }
 }
