@@ -36,4 +36,31 @@ public class CustomerService {
         customer.setId(null);
         return customerMapper.toDTO(customerRepository.save(customer));
     }
+
+    public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con ID " + id + " no encontrado"));
+
+        if (customerDTO.getFirstName() != null) {
+            customer.setFirstName(customerDTO.getFirstName());
+        }
+        if (customerDTO.getLastName() != null) {
+            customer.setLastName(customerDTO.getLastName());
+        }
+        if (customerDTO.getAccountNumber() != null) {
+            customer.setAccountNumber(customerDTO.getAccountNumber());
+        }
+        if (customerDTO.getBalance() != null) {
+            customer.setBalance(customerDTO.getBalance());
+        }
+
+        return customerMapper.toDTO(customerRepository.save(customer));
+    }
+
+    public void deleteCustomer(Long id) {
+        if (!customerRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cliente con ID " + id + " no encontrado");
+        }
+        customerRepository.deleteById(id);
+    }
 }
